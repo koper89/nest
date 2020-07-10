@@ -22,6 +22,7 @@ export interface PatternProperties {
   pattern: PatternMetadata;
   methodKey: string;
   isEventHandler: boolean;
+  isDynamicHandler: boolean;
   targetCallback: (...args: any[]) => any;
   transport?: Transport;
 }
@@ -63,7 +64,8 @@ export class ListenerMetadataExplorer {
       targetCallback,
       pattern,
       transport,
-      isEventHandler: handlerType === PatternHandler.EVENT,
+      isEventHandler: handlerType === PatternHandler.EVENT || handlerType === PatternHandler.DYNAMIC_EVENT,
+      isDynamicHandler: handlerType === PatternHandler.DYNAMIC_MESSAGE || handlerType === PatternHandler.DYNAMIC_EVENT,
     };
   }
 

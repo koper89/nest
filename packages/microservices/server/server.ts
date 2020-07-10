@@ -42,9 +42,11 @@ export abstract class Server {
     pattern: any,
     callback: MessageHandler,
     isEventHandler = false,
+    isDynamicHandler = false,
   ) {
     const route = this.normalizePattern(pattern);
     callback.isEventHandler = isEventHandler;
+    callback.isDynamicHandler = isDynamicHandler;
     this.messageHandlers.set(route, callback);
   }
 

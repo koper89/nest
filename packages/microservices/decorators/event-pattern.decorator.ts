@@ -28,3 +28,27 @@ export const EventPattern = <T = string>(
     return descriptor;
   };
 };
+
+/**
+ * Allows dynamic subscribtion to incoming events which fulfils chosen pattern.
+ */
+export const DynamicEventPattern = <T = string>(
+  metadata?: T,
+  transport?: Transport,
+): MethodDecorator => {
+  return (
+    target: object,
+    key: string | symbol,
+    descriptor: PropertyDescriptor,
+  ) => {
+    Reflect.defineMetadata(PATTERN_METADATA, metadata, descriptor.value);
+    Reflect.defineMetadata(
+      PATTERN_HANDLER_METADATA,
+      PatternHandler.DYNAMIC_EVENT,
+      descriptor.value,
+    );
+    Reflect.defineMetadata(TRANSPORT_METADATA, transport, descriptor.value);
+    return descriptor;
+  };
+};
+

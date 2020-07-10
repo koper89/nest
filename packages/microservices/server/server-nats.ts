@@ -61,7 +61,24 @@ export class ServerNats extends Server implements CustomTransportStrategy {
           );
 
     const registeredPatterns = [...this.messageHandlers.keys()];
-    registeredPatterns.forEach(channel => subscribe(channel));
+    registeredPatterns.forEach(channel => {
+      const { isDynamicHandler } = this.messageHandlers.get(channel);
+      if (!isDynamicHandler) {
+        subscribe(channel)
+      }
+    });
+  }
+
+  public bindDynamicEvent(subject: string, channel: string, client: Client) {
+    const messageHandler = this.messageHandlers.get(channel);
+
+    if (messageHandler && messageHandler.isDynamicHandler) {
+      console.log(subject);
+      client.subscribe(
+        subject,
+        this.getMessageHandler(channel, client).bind(this),
+      );
+    }
   }
 
   public close() {

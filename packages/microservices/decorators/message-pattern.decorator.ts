@@ -38,6 +38,29 @@ export const MessagePattern = <T = PatternMetadata | string>(
 };
 
 /**
+ * Allows dynamic subscribtion to incoming events which fulfils chosen pattern.
+ */
+export const DynamicMessagePattern = <T = PatternMetadata | string>(
+  metadata?: T,
+  transport?: Transport,
+): MethodDecorator => {
+  return (
+    target: object,
+    key: string | symbol,
+    descriptor: PropertyDescriptor,
+  ) => {
+    Reflect.defineMetadata(PATTERN_METADATA, metadata, descriptor.value);
+    Reflect.defineMetadata(
+      PATTERN_HANDLER_METADATA,
+      PatternHandler.DYNAMIC_MESSAGE,
+      descriptor.value,
+    );
+    Reflect.defineMetadata(TRANSPORT_METADATA, transport, descriptor.value);
+    return descriptor;
+  };
+};
+
+/**
  * Registers gRPC method handler for specified service.
  */
 export function GrpcMethod(service?: string): MethodDecorator;

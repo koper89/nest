@@ -72,6 +72,7 @@ describe('ListenerMetadataExplorer', () => {
         'test',
       );
       expect(metadata).to.have.keys([
+        'isDynamicHandler',
         'isEventHandler',
         'methodKey',
         'targetCallback',

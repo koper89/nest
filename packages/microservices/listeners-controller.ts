@@ -70,7 +70,7 @@ export class ListenersController {
           transport === server.transportId,
       )
       .forEach(
-        ({ pattern, targetCallback, methodKey, transport, isEventHandler }) => {
+        ({ pattern, targetCallback, methodKey, transport, isEventHandler, isDynamicHandler }) => {
           if (isStatic) {
             const proxy = this.contextCreator.create(
               instance as object,
@@ -81,7 +81,7 @@ export class ListenersController {
               undefined,
               defaultCallMetadata,
             );
-            return server.addHandler(pattern, proxy, isEventHandler);
+            return server.addHandler(pattern, proxy, isEventHandler, isDynamicHandler);
           }
           const asyncHandler = this.createRequestScopedHandler(
             instanceWrapper,
@@ -91,7 +91,7 @@ export class ListenersController {
             methodKey,
             defaultCallMetadata,
           );
-          server.addHandler(pattern, asyncHandler, isEventHandler);
+          server.addHandler(pattern, asyncHandler, isEventHandler, isDynamicHandler);
         },
       );
   }
